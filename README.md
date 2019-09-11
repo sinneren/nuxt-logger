@@ -1,4 +1,4 @@
-# nuxt-logger
+# nuxt-logger-fs
 
 [![npm](https://img.shields.io/npm/dt/nuxt-logger.svg?style=flat-square)](https://npmjs.com/package/nuxt-logger)
 [![npm (scoped with tag)](https://img.shields.io/npm/v/nuxt-logger/latest.svg?style=flat-square)](https://npmjs.com/package/nuxt-logger)
