@@ -29,6 +29,8 @@
 logger: {
   isEnabled: true, // true or false, defaults to true
   logLevel: 'debug', // debug, info, warn or error, defaults to debug
+  toFile: false, //true to file, false to console by default
+	fileName: 'error.log', //default file name
 }
 ```
 

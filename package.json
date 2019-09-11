@@ -1,6 +1,6 @@
 {
-  "name": "nuxt-logger",
-  "version": "0.2.0",
+  "name": "nuxt-logger-fs",
+  "version": "0.2.1",
   "description": "logger module for nuxtjs",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mahnuh/nuxt-logger.git"
+    "url": "git+https://github.com/sinneren/nuxt-logger.git"
   },
   "keywords": [
     "nuxtjs"
@@ -16,8 +16,12 @@
   "author": "Manuel Heidrich",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mahnuh/nuxt-logger/issues"
+    "url": "https://github.com/sinneren/nuxt-logger/issues"
   },
-  "homepage": "https://github.com/mahnuh/nuxt-logger#readme",
-  "dependencies": {}
+  "homepage": "https://github.com/sinneren/nuxt-logger#readme",
+  "dependencies": {
+    "moment": "^2.20.1",
+    "moment-timezone": "^0.5.14",
+    "node-stringify": "^0.2.1"
+  }
 }

@@ -1,8 +1,14 @@
 import Vue from 'vue'
 
+const fs = require('fs');
+const moment = require('moment-timezone');
+const stringify = require('node-stringify');
+
 const defaultOptions = {
 	isEnabled: true,
 	logLevel: 'debug',
+	toFile: false,
+	fileName: 'error.log',
 }
 
 const outputConfig = {
@@ -32,11 +38,15 @@ function initializeLogger(options, logLevels) {
 		if (logLevels.indexOf(logLevel) >= logLevels.indexOf(options.logLevel) && options.isEnabled) {
 			return logger[logLevel] = (...args) => {
 				const methodName = getMethodName()
-				output(logLevel, methodName, args)
+				if (options.toFile) {
+					output_fl(logLevel, methodName, args)
+				} else {
+					output(logLevel, methodName, args)
+				}
 			}
 		}
-		
-		logger[logLevel] = () => {}
+
+		logger[logLevel] = () => { }
 	})
 
 	return logger
@@ -44,10 +54,49 @@ function initializeLogger(options, logLevels) {
 
 function output(logLevel, methodName, args) {
 	console.log('%c' + outputConfig[logLevel].name + '%c' + methodName + '()', 'background: ' + outputConfig[logLevel].color + ';padding: 2px 8px; border-radius: 6px 0 0 6px; color: #fff', 'background: #E5E5E5; padding: 2px 8px; border-radius: 0 6px 6px 0;')
-	
+
 	args.forEach((arg) => {
 		console.log('%c>>', 'color: ' + outputConfig[logLevel].color + '; margin-left:5px;', arg)
 	})
+}
+
+function output_fl(logLevel, methodName, args) {
+	let time = moment().tz(options.timeZone).format(options.timeFormat);
+	let date = moment().tz(options.timeZone).format(options.dateFormat);
+	let currentTime = date + ' ' + time;
+	let errorLine = '';
+
+	try {
+		errorLine = currentTime + ' | '
+			+ outputConfig[logLevel].name + ' | '
+			+ stringify(args) + ' | '
+			+ (methodName ? ('Method: ' + methodName + ' | ') : '')
+			+ (errorObj ? ('\n' + stringify(errorObj)) : '')
+			+ '\n';
+
+
+	}
+	catch (err) {
+		errorLine = currentTime + ' | '
+			+ outputConfig[logLevel].name + ' | '
+			+ stringify(args) + ' | '
+			+ (methodName ? ('Method: ' + methodName + ' | ') : '')
+			+ 'Error object could not be logged'
+			+ '\n';
+	}
+
+	try {
+		fs.appendFile(options.fileName, errorLine, (err) => {
+			if (err) {
+				console.log('Node file logger Error: ' + err);
+			}
+			if (callback) callback(err);
+		});
+	}
+	catch (ex) {
+
+	}
+
 }
 
 function getMethodName() {
@@ -57,7 +106,7 @@ function getMethodName() {
 
 	// return if browser does not have .stack property
 	if (error.stack === undefined) {
-			return ''
+		return ''
 	}
 
 	let methodName = error.stack.split('\n')[3]
@@ -79,29 +128,29 @@ function getMethodName() {
 }
 
 const loggerPlugin = {
-  install (v, options) {
-    if (Vue.__nuxt_logger_installed__) {
-      return
-    }
+	install(v, options) {
+		if (Vue.__nuxt_logger_installed__) {
+			return
+		}
 		Vue.__nuxt_logger_installed__ = true
-		
+
 		options = Object.assign({}, defaultOptions, options)
 
-    if (!Vue.prototype.$log) {
-      Vue.prototype.$log = initializeLogger(options, logLevels)
-    }
-  }
+		if (!Vue.prototype.$log) {
+			Vue.prototype.$log = initializeLogger(options, logLevels)
+		}
+	}
 
 }
 
 Vue.use(loggerPlugin, <%= serialize(options) %>)
 
 export default (ctx) => {
-  const { app, store } = ctx
+	const { app, store } = ctx
 
-  app.$log = Vue.prototype.$log
-  ctx.$log = Vue.prototype.$log
-  if (store) {
-    store.$log = Vue.prototype.$log
-  }
+	app.$log = Vue.prototype.$log
+	ctx.$log = Vue.prototype.$log
+	if (store) {
+		store.$log = Vue.prototype.$log
+	}
 }
