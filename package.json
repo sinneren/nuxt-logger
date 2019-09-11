@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sinneren/nuxt-logger.git"
+    "url": "git+https://github.com/sinneren/nuxt-logger-fs.git"
   },
   "keywords": [
     "nuxtjs"
@@ -16,9 +16,9 @@
   "author": "Manuel Heidrich",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sinneren/nuxt-logger/issues"
+    "url": "https://github.com/sinneren/nuxt-logger-fs/issues"
   },
-  "homepage": "https://github.com/sinneren/nuxt-logger#readme",
+  "homepage": "https://github.com/sinneren/nuxt-logger-fs#readme",
   "dependencies": {
     "moment": "^2.20.1",
     "moment-timezone": "^0.5.14",
